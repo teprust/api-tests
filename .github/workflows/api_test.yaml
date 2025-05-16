@@ -1,4 +1,4 @@
-name: Run Selenium Tests
+name: Run API Tests
 
 on:
   push:
@@ -9,13 +9,8 @@ on:
       - main
 
 jobs:
-  selenium:
+  api-test:
     runs-on: ubuntu-latest
-
-    services:
-      selenium:
-        image: selenium/standalone-chrome
-        options: --shm-size=2g
 
     steps:
     - name: Checkout code
