@@ -1,4 +1,5 @@
 from api_client.models.register import RegisterModel
+from api_client.texts.error_texts import ResponseErrorText
 
 
 class TestRegisterNewUser:
@@ -43,7 +44,7 @@ class TestRegisterNewUser:
 
         # Проверяем текст поля ответа
         assert response.json()['status'] == "Error"
-        assert response.json()['message'] == "Missing login or password"
+        assert response.json()['message'] == ResponseErrorText.LOGIN_PASSWORD
 
     def test_register_new_user_with_empty_password_2(self, api_client):
         '''
@@ -67,4 +68,4 @@ class TestRegisterNewUser:
 
         # Проверяем текст поля ответа
         assert response.json()['status'] == "Error"
-        assert response.json()['message'] == "Missing login or password"
+        assert response.json()['message'] == ResponseErrorText.LOGIN_PASSWORD

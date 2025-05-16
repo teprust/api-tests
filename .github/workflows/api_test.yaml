@@ -1,0 +1,48 @@
+name: Run Selenium Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  selenium:
+    runs-on: ubuntu-latest
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+        options: --shm-size=2g
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Selenium tests
+      run: |
+        pytest tests --headless --junit-xml=reports/results.xml 
+
+    - name: Send Test Results to TestIT
+      run: |
+        testit results import \
+          --url https://team-zhj7.testit.software \
+          --project-id 0196168e-edc5-7f13-b912-3f32a88063b7 \
+          --configuration-id 0196168e-edf6-71f2-997b-2b6dcbd545e5 \
+          --testrun-name "Pytest test run" \
+          --results reports \
+          --token ${{ secrets.SECRET}}
+      env:
+        TMS_TOKEN: ${{ secrets.SECRET }}
